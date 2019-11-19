@@ -99,7 +99,7 @@ export default class DesignerPage {
     this.versionNumber = Selector('div > div').withAttribute('aria-label', 'Versjonsnummer'); 
     this.versionDescription = Selector('div > textarea');
     this.buildButton = Selector('button').withExactText('Bygg versjon');
-    this.latestBuilds = Selector('.MuiGrid-root').withText('Tidligere bygg av applikasjonen').parent(0).sibling(3);
+    this.latestBuilds = Selector('p').withText("Versjon: ");
     this.deployButton = Selector('button').withExactText('Deploy ny versjon');
     this.deployVersionDropDown = Selector('#deploy-select-at21');
     this.deployVersionOptions = Selector('.select__menu-list');
