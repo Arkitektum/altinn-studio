@@ -265,7 +265,6 @@ namespace Altinn.Platform.Storage.Controllers
             existingApplication.ValidFrom = application.ValidFrom;
             existingApplication.Title = application.Title;
             existingApplication.ProcessId = application.ProcessId;
-            existingApplication.MaxSize = application.MaxSize;
             existingApplication.DataTypes = application.DataTypes;
             if (existingApplication.PartyTypesAllowed == null)
             {

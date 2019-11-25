@@ -82,8 +82,7 @@ namespace Altinn.Platform.Storage.IntegrationTest
                     { "nb", "XML test application" },
                 },
                 ValidFrom = new DateTime(2019, 07, 01),
-                ValidTo = new DateTime(2020, 06, 30),
-                MaxSize = 200000,
+                ValidTo = new DateTime(2020, 06, 30)
             };
 
             Application result = applicationClient.CreateApplication(application);

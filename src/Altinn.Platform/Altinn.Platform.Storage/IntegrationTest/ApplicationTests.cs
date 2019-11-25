@@ -169,9 +169,7 @@ namespace Altinn.Platform.Storage.IntegrationTest
             getResponse.EnsureSuccessStatusCode();
 
             string json = await getResponse.Content.ReadAsStringAsync();
-            Application application = JsonConvert.DeserializeObject<Application>(json);                
-
-            application.MaxSize = 2000;
+            Application application = JsonConvert.DeserializeObject<Application>(json);
 
             // update it
             HttpResponseMessage putResponse = await client.PutAsync(requestUri, application.AsJson());
@@ -186,7 +184,7 @@ namespace Altinn.Platform.Storage.IntegrationTest
             string json2 = await getResponse2.Content.ReadAsStringAsync();
             Application application2 = JsonConvert.DeserializeObject<Application>(json2);
 
-            Assert.Equal(application.MaxSize, application2.MaxSize);
+            Assert.Equal(application.Id, application2.Id);
         }       
     }
 }
