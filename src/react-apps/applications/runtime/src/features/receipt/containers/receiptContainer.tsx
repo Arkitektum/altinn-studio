@@ -8,6 +8,7 @@ import AltinnContentLoader from '../../../../../shared/src/components/molecules/
 import ReceiptComponent from '../../../../../shared/src/components/organisms/AltinnReceipt';
 import { getInstancePdf, mapInstanceAttachments} from '../../../../../shared/src/utils/attachments';
 import { getLanguageFromKey, getUserLanguage } from '../../../../../shared/src/utils/language';
+import { IPartyState } from '../../../shared/resources/party/partyReducers';
 import { IRuntimeState } from '../../../types';
 import { IAttachment, IInstance } from './../../../../../shared/src/types/index.d';
 import { returnUrlToMessagebox } from './../../../../../shared/src/utils/urlHelper';
@@ -20,7 +21,7 @@ export interface IReceiptContainerProps extends RouteChildrenProps {
 export const returnInstanceMetaDataObject = (
   orgsData: any,
   languageData: any,
-  profileData: any,
+  partyData: any,
   instanceGuid: string,
   userLanguageString: string,
   lastChangedDateTime: string,
@@ -30,12 +31,9 @@ export const returnInstanceMetaDataObject = (
 
   obj[getLanguageFromKey('receipt.date_sent', languageData)] = lastChangedDateTime;
 
-  let sender: string = '';
-  if (profileData.profile && profileData.profile.party.person.ssn) {
-    sender = `${profileData.profile.party.person.ssn}-${profileData.profile.party.name}`;
-  } else if (profileData) {
-    sender = `${profileData.profile.party.orgNumber}-${profileData.profile.party.name}`;
-  }
+  const identifier = partyData.selectedParty && partyData.selectedParty.ssn ?
+    partyData.selectedParty.ssn : partyData.selectedParty.orgNumber;
+  const sender = `${identifier}-${partyData.selectedParty.name}`;
   obj[getLanguageFromKey('receipt.sender', languageData)] = sender;
 
   if (orgsData[org]) {
@@ -62,7 +60,7 @@ const ReceiptContainer = (props: IReceiptContainerProps ) => {
   const applicationMetadata: any = useSelector((state: IRuntimeState) => state.applicationMetadata.applicationMetadata);
   const instance: IInstance = useSelector((state: IRuntimeState) => state.instanceData.instance);
   const language: any = useSelector((state: IRuntimeState) => state.language.language);
-  const profile: any = useSelector((state: IRuntimeState) => state.profile);
+  const party: IPartyState = useSelector((state: IRuntimeState) => state.party);
 
   const origin = window.location.origin;
   const routeParams: any = props.match.params;
@@ -74,7 +72,7 @@ const ReceiptContainer = (props: IReceiptContainerProps ) => {
       !lastChangedDateTime ||
       !appName ||
       !allOrgs ||
-      !profile ||
+      !party ||
       !instance ||
       !lastChangedDateTime
     );
@@ -87,13 +85,13 @@ const ReceiptContainer = (props: IReceiptContainerProps ) => {
   }, []);
 
   React.useEffect(() => {
-    if (allOrgs != null && profile.profile && instance && instance.org && allOrgs) {
+    if (allOrgs != null && party.selectedParty && instance && instance.org && allOrgs) {
       const obj = returnInstanceMetaDataObject(
-        allOrgs, language, profile, routeParams.instanceGuid, userLanguage, lastChangedDateTime, instance.org,
+        allOrgs, language, party, routeParams.instanceGuid, userLanguage, lastChangedDateTime, instance.org,
       );
       setInstanceMetaObject(obj);
     }
-  }, [allOrgs, profile, instance, lastChangedDateTime]);
+  }, [allOrgs, party, instance, lastChangedDateTime]);
 
   React.useEffect(() => {
     if (applicationMetadata && applicationMetadata.title) {
