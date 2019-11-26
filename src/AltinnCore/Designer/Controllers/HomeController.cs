@@ -188,7 +188,7 @@ namespace AltinnCore.Designer.Controllers
                 principal,
                 new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTime.UtcNow.AddMinutes(200),
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(10),
                     IsPersistent = false,
                     AllowRefresh = false,
                 });

@@ -52,6 +52,7 @@ namespace AltinnCore.Designer
             services.RegisterServiceImplementations(Configuration);
             services.RegisterIntegrations(Configuration);
 
+            services.AddSession(o => o.IdleTimeout = TimeSpan.FromMinutes(1));
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
             services.AddResponseCompression();
@@ -97,6 +98,7 @@ namespace AltinnCore.Designer
                 appBuilder.UseExceptionHandler("/error");
             }
 
+            appBuilder.UseSession();
             appBuilder.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = context =>
