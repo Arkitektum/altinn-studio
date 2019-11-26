@@ -23,6 +23,7 @@ export const returnInstanceMetaDataObject = (
   languageData: any,
   partyData: any,
   instanceGuid: string,
+  instanceOwnerId: string,
   userLanguageString: string,
   lastChangedDateTime: string,
   org: any,
@@ -31,10 +32,12 @@ export const returnInstanceMetaDataObject = (
 
   obj[getLanguageFromKey('receipt.date_sent', languageData)] = lastChangedDateTime;
 
-  const identifier = partyData.selectedParty && partyData.selectedParty.ssn ?
-    partyData.selectedParty.ssn : partyData.selectedParty.orgNumber;
-  const sender = `${identifier}-${partyData.selectedParty.name}`;
-  obj[getLanguageFromKey('receipt.sender', languageData)] = sender;
+  const instanceOwnerParty = partyData.parties.find((party: any) => party.partyId.toString() === instanceOwnerId);
+  if (instanceOwnerParty) {
+    const identifier = instanceOwnerParty.ssn ? instanceOwnerParty.ssn : instanceOwnerParty.orgNumber;
+    const sender = `${identifier}-${instanceOwnerParty.name}`;
+    obj[getLanguageFromKey('receipt.sender', languageData)] = sender;
+  }
 
   if (orgsData[org]) {
     obj[getLanguageFromKey('receipt.receiver', languageData)] = orgsData[org].name[userLanguageString];
@@ -87,7 +90,14 @@ const ReceiptContainer = (props: IReceiptContainerProps ) => {
   React.useEffect(() => {
     if (allOrgs != null && party.selectedParty && instance && instance.org && allOrgs) {
       const obj = returnInstanceMetaDataObject(
-        allOrgs, language, party, routeParams.instanceGuid, userLanguage, lastChangedDateTime, instance.org,
+        allOrgs,
+        language,
+        party,
+        routeParams.instanceGuid,
+        instance.instanceOwnerId,
+        userLanguage,
+        lastChangedDateTime,
+        instance.org,
       );
       setInstanceMetaObject(obj);
     }
