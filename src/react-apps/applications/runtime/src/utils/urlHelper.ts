@@ -24,9 +24,8 @@ export const partySelectionUrl: string = `${appPath}/#/partyselection`;
 export const refreshJwtTokenUrl: string = `${appPath}/api/authentication/keepAlive`;
 export const reactErrorPage: string = `${appPath}/#/error`;
 
-export function fileUploadUrl(attachmentType: string, attachmentName: string) {
-  return `${appPath}/instances/` +
-  `${altinnWindow.instanceId}/data?dataType=${attachmentType}&attachmentName=${attachmentName}`;
+export function fileUploadUrl(attachmentType: string) {
+  return `${appPath}/instances/${altinnWindow.instanceId}/data?dataType=${attachmentType}`;
 }
 
 export function dataElementUrl(dataGuid: string) {
