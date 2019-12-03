@@ -25,7 +25,7 @@ export function* uploadAttachmentSaga(
 
     const axiosConfig = {
       headers: {
-        attachmentName: file.name,
+        'Content-Disposition': `attachment; filename=${file.name}`,
       },
     };
 
