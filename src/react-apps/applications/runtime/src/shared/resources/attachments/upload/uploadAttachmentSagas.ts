@@ -23,14 +23,8 @@ export function* uploadAttachmentSaga(
     const data = new FormData();
     data.append('file', file);
 
-    const axiosConfig = {
-      headers: {
-        'Content-Disposition': `attachment; filename=${file.name}`,
-      },
-    };
-
     const fileUploadLink = fileUploadUrl(attachmentType);
-    const response = yield call(post, fileUploadLink, axiosConfig, data);
+    const response = yield call(post, fileUploadLink, null, data);
 
     if (response.status === 200) {
       const attachment: IAttachment
